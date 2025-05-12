@@ -3,7 +3,7 @@ require('express-async-errors');
 
 const express = require('express');
 const app = express();
-const connectDb = require('./db/connect');
+const connectDB = require('./db/connect');
 const storiesRouter = require('./routes/stories');
 const authRouter = require('./routes/auth');
 
