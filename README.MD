@@ -1,3 +1,5 @@
+I dream to build a Story App where users can sign up, log in, and create personal stories--whether it’s a diary, life story, memory, travel log, or learning experience. The app would allow users to edit/delete stories, manage story metadata (event dates, tags), and potentially include features like image uploads, search, filtering by date, pinning favorites.
+
 #### Setup
 
 ```bash
@@ -14,7 +16,7 @@ npm install && npm start
 #### Routers
 
 - auth.js
-- jobs.js
+- stories.js
 
 #### User Model
 
