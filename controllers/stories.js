@@ -3,11 +3,25 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 const getAllStories = async (req, res) => {
-  res.send("Get all stories");
+  const stories = await Story.find({ createdBy: req.user.userId }).sort(
+    "createdAt"
+  );
+  res.status(StatusCodes.OK).json({ stories, count: stories.length });
 };
 
 const getStoryById = async (req, res) => {
-  res.send("Get story by id");
+  const {
+    user: { userId },
+    params: { id: storyId },
+  } = req;
+  const story = await Story.findOne({
+    _id: storyId,
+    createdBy: userId,
+  });
+  if (!story) {
+    throw new NotFoundError(`No story with id: ${storyId}`);
+  }
+  res.status(StatusCodes.OK).json({ story });
 };
 
 const createStory = async (req, res) => {
@@ -17,11 +31,46 @@ const createStory = async (req, res) => {
 };
 
 const updateStory = async (req, res) => {
-  res.send("Story has been successfully updated");
+  const {
+    body: { title, description, tags, isFavorite, imageUrl, storyDate },
+    user: { userId },
+    params: { id: storyId },
+  } = req;
+  
+  if (!title || !description ) {
+    throw new BadRequestError("Please provide title and description");
+  }
+  
+  req.body.description = req.body.description.trim();
+  
+  const story = await Story.findOneAndUpdate(
+    { _id: storyId, createdBy: userId },
+    req.body,
+    { new: true, runValidators: true }
+  );
+  
+  if (!story) {
+    throw new NotFoundError(`No story with id: ${storyId}`);
+  }
+  res.status(StatusCodes.OK).json({ story });
 };
 
 const deleteStory = async (req, res) => {
-  res.send("Story has been successfully deleted");
+  const {
+    user: { userId },
+    params: { id: storyId },
+  } = req;
+  
+  const story = await Story.findOneAndRemove({
+    _id: storyId,
+    createdBy: userId,
+  });
+  if (!story) {
+    throw new NotFoundError(`No story with id: ${storyId}`);
+  }
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "Story has been successfully deleted" });
 };
 
 module.exports = {

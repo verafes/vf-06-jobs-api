@@ -8,9 +8,11 @@ const StorySchema = new mongoose.Schema(
       trim: true,
       maxlength: [100, "Title cannot exceed 100 characters"],
     },
-    story: {
+    description: {
       type: String,
       required: [true, "Please enter a story description"],
+      trim: true,
+      maxlength: [5000, "Description can't exceed 5000 characters"],
     },
     tags: {
       type: [String],
