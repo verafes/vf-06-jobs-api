@@ -7,6 +7,10 @@ const cors = require("cors");
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 
+//Swagger
+const swaggerUI = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+
 const express = require("express");
 const app = express();
 const connectDB = require("./db/connect");
@@ -36,9 +40,9 @@ app.use(xss());
 // routes
 app.get("/", (req, res) => {
   console.log("Client IP:", req.ip);
-  res.send("Stories api");
+  res.send("<h1>Stories API</h1><a href='/api-docs'>Documentation</a>");
 });
-
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/stories", authenticateUser, storiesRouter);
 
