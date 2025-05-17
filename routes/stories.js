@@ -13,7 +13,6 @@ router
     .route("/:id")
     .get(getStoryById)
     .patch(updateStory)
-    .put(updateStory)
     .delete(deleteStory);
 
 module.exports = router;
