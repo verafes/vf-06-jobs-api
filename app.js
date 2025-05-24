@@ -39,11 +39,13 @@ app.use(cors());
 app.use(xss());
 
 // routes
-app.get("/", (req, res) => {
-  console.log("Client IP:", req.ip);
-  res.send("<h1>Stories API</h1><a href='/api-docs'>Documentation</a>");
-});
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+// app.get("/", (req, res) => {
+//   console.log("Client IP:", req.ip);
+//   res.send("<h1>Stories API</h1><a href='/api-docs'>Documentation</a>");
+// });
+// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+app.use(express.static("public"));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/stories", authenticateUser, storiesRouter);
 
@@ -59,7 +61,7 @@ const start = async () => {
       console.log(`Server is listening on port ${port}...`)
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
